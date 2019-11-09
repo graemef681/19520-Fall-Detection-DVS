@@ -1,37 +1,52 @@
-# A basic speech recognition program
+# A basic speech recognition program from microphone
 
 import speech_recognition as sr
 import pocketsphinx as ps
+import pyaudio as py
 import os
+import pyaudio
+import wave
 
-directory_in_str = "./Dataset/yes/" #define directory of files to recognise
-recog = sr.Recognizer() #create a reconiser
+from TextToSpeech import *
+from voiceRecog import *
 
-directory = os.fsencode(directory_in_str)
-#print(directory)
-count=0
-count2 = 0
-num = 1
-for file in os.listdir(directory):
-     filename = os.fsdecode(file)
-     if filename.endswith(".wav"):
-        yes = sr.AudioFile(directory_in_str+filename)
-        with yes as source:
-            audio = recog.record(source) #pull in audio signal from file
-     try:
-        result = recog.recognize_sphinx(audio)
-        print(result)  # use pocketsphinx to recognise the speech
-        if (result == "yes" or result=="yeah"):
-            count = count + 1
-        else:
-            print(result, ": ", num)
-     except: #if it can't tell what it is it throws an exception, so catch it
-        print("No transcription available for " + filename)
-        count2= count2+1
-     print(num) #how far through are we
-     num=num +1
+speak() #text to speec test function
 
-print("final count = ")
-print(count)
-print("no transcript")
-print(count2)
+#------------Record the speech------------------
+CHUNK = 1024
+FORMAT = pyaudio.paInt16
+CHANNELS = 2
+RATE = 44100
+RECORD_SECONDS = 5
+WAVE_OUTPUT_FILENAME = "output.wav"
+
+p = pyaudio.PyAudio()
+
+stream = p.open(format=FORMAT,
+                channels=CHANNELS,
+                rate=RATE,
+                input=True,
+                frames_per_buffer=CHUNK)
+
+print("* recording")
+
+frames = []
+
+for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
+    data = stream.read(CHUNK)
+    frames.append(data)
+
+print("* done recording")
+
+stream.stop_stream()
+stream.close()
+p.terminate()
+
+wf = wave.open(WAVE_OUTPUT_FILENAME, 'wb')
+wf.setnchannels(CHANNELS)
+wf.setsampwidth(p.get_sample_size(FORMAT))
+wf.setframerate(RATE)
+wf.writeframes(b''.join(frames))
+wf.close()
+
+basic("./output.wav") # recognise the speech
