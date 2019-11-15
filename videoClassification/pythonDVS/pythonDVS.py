@@ -2,6 +2,9 @@ import cv2 # for image processing
 import os # for delete files
 import numpy # for arrays
 
+PERCENTILE = 98
+
+
 if os.path.isfile('peopleWalking.mp4'):
    peopleWalkingVideo = cv2.VideoCapture('peopleWalking.mp4')
 else:
@@ -28,7 +31,7 @@ print("Number of frames: {}".format(count + 1))
 
 differenceArray = []
 count = 0
-for count in range(59): # calculates difference in frames
+for count in range(30): # calculates difference in frames
   differenceArray.append((imageArray[count+1]-imageArray[count]))
   print("Calculating Diffference in frame:")
   print(count)
@@ -41,27 +44,35 @@ print(len(differenceArray))
 #performs thresholding
 dvsFrames = differenceArray
 
-averageValue = numpy.mean(dvsFrames)
+averageValue = numpy.percentile(dvsFrames,PERCENTILE)
 print("Mean value is:")
 print(averageValue)
 
-for frameNumber in range(len(dvsFrames)):
-   print("Frame number:")
-   print(frameNumber)
-   for pixelNumber in dvsFrames[frameNumber]:
-      for pixel in pixelNumber:
-         if pixel > (averageValue * 6):
-            pixel = 255
-         else:
-            pixel = 0
+q = 1
 
+for frameNumber in range(len(dvsFrames)):
+    frame = dvsFrames[frameNumber]
+    averageValue = numpy.percentile(frame,PERCENTILE)
+    (height, width) = frame.shape
+    numel = height * width
+    for columnNumber in range(width):
+        for rowNumber in range(height):
+            if frame[rowNumber, columnNumber] < averageValue:
+                frame[rowNumber, columnNumber] = 0
+            else:
+                frame[rowNumber, columnNumber] = 255
+    dvsFrames[frameNumber] = frame
+    
+    #cv2.imwrite("TEST%d.jpg" % q, frame)
+    #q=q+1
+    print("Thresholding Frame {} complete".format(frameNumber))
 
 
 
 size = (width, height)
 
 
-for x in range(58):
+for x in range(30):
    print("saving frame:")
    print(x)
    cv2.imwrite("frame%d.jpg" % x, differenceArray[x])
