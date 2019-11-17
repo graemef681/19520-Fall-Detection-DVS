@@ -1,52 +1,70 @@
 # A basic speech recognition program from microphone
-
-import speech_recognition as sr
-import pocketsphinx as ps
-import pyaudio as py
-import os
-import pyaudio
-import wave
-
+from RecordSpeech import *
 from TextToSpeech import *
 from voiceRecog import *
+#from TestFunctions import *
 
-speak() #text to speec test function
+noTries = 0 #number of tries to get clear answer from user
 
-#------------Record the speech------------------
-CHUNK = 1024
-FORMAT = pyaudio.paInt16
-CHANNELS = 2
-RATE = 44100
-RECORD_SECONDS = 5
-WAVE_OUTPUT_FILENAME = "output.wav"
+#-------Speak to the user--------
+#speak() #text to speec test function
 
-p = pyaudio.PyAudio()
+#-------Record their response-----
+#outputpath = "./output.wav"
+#audio_filename = record_input(outputpath)
+audio_filename = "./Dataset/no/0bde966a_nohash_0.wav" #"noisy.wav"
 
-stream = p.open(format=FORMAT,
-                channels=CHANNELS,
-                rate=RATE,
-                input=True,
-                frames_per_buffer=CHUNK)
+#----------Load Templates---------
+template1 = AudioSegment.from_file("./Dataset/Template/0a7c2a8d_nohash_0.wav")  # female yes
+template2 = AudioSegment.from_file("./Dataset/Template/0b40aa8e_nohash_0.wav")  # female no
+template3 = AudioSegment.from_file("./Dataset/Template/0135f3f2_nohash_0.wav")  # male yes
+template4 = AudioSegment.from_file("./Dataset/Template/0b56bcfe_nohash_0.wav")  # male no
 
-print("* recording")
+#-----------Filter----------------
+bandpassed = bandpassSignal(audio_filename)
 
-frames = []
+#check similarity with yes and no templates
+measure1 = checkSimilarity(bandpassed.get_array_of_samples(),template1.get_array_of_samples())
+measure2 = checkSimilarity(bandpassed.get_array_of_samples(),template4.get_array_of_samples())
 
-for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
-    data = stream.read(CHUNK)
-    frames.append(data)
+if measure1>measure2:
+    #more correlated with yes template than no so it's probably yes
+    filtered = removeNoise(bandpassed,template1) #check if it's yes
+else:
+    filtered = removeNoise(bandpassed,template4) # check if it's no
 
-print("* done recording")
+#--------guess word from lowest mse comparing to template---------------
+MSEguess = fromMSEGuessWord(filtered)
 
-stream.stop_stream()
-stream.close()
-p.terminate()
+#-------Write filtered signal to Output File-------------------
+filename = 'filtered.wav'
+write("filtered.wav", 16000, np.int16(np.real(filtered)))  # output the file
 
-wf = wave.open(WAVE_OUTPUT_FILENAME, 'wb')
-wf.setnchannels(CHANNELS)
-wf.setsampwidth(p.get_sample_size(FORMAT))
-wf.setframerate(RATE)
-wf.writeframes(b''.join(frames))
-wf.close()
+#--------Recognise Speech------------
+inputpath = filename
+srGuess = basic(inputpath) # recognise the speech
 
-basic("./output.wav") # recognise the speech
+#----------check category of answer--------
+#i.e. check for things like yeah, nah etc.
+#change guess based on that
+
+#--------Confirm Answer-------------
+if srGuess =="yes" and MSEguess == "yes":
+    print("Yes")
+    #do action based on answer yes
+elif srGuess =="no" and MSEguess=="no":
+    print("No")
+    # do action based on answer no
+elif srGuess == "Can't recognise speech" and noTries<3:
+    print("Can't recognise speech")
+    #ask the user again
+    #increment no. tries
+elif noTries>=3:
+    print("Out of tries")
+    #user not giving clear replies so call ambulance
+else:
+    print("Other case: MSEguess = ", MSEguess, " and srGuess = ", srGuess)
+    #no answer or answers disagree
+    #ask user again
+    #increment noTries
+
