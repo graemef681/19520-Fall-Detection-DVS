@@ -1,14 +1,13 @@
 import pyaudio
 import wave
 
-def record_input(outputPath):
+def record_input(WAVE_OUTPUT_FILENAME):
     #------------Record the speech------------------
     CHUNK = 1024
     FORMAT = pyaudio.paInt16
     CHANNELS = 2
     RATE = 44100
     RECORD_SECONDS = 5
-    WAVE_OUTPUT_FILENAME = "output.wav"
 
     p = pyaudio.PyAudio()
 

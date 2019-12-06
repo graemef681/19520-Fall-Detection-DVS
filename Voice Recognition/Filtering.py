@@ -2,7 +2,8 @@ import pydub
 from pydub import AudioSegment
 import numpy as np
 import matplotlib.pyplot as plt
-from operator import sub
+from scipy.io import wavfile
+from scipy.io.wavfile import write, read
 #Pydub has functions for high pass and low pass filters we can use to bandpass
 
 def bandpassSignal(filename):

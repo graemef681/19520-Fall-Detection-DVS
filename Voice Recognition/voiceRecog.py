@@ -18,17 +18,17 @@ def basic(filename): #basic speech recognition
         result="Can't recognise speech"
     return result
 
-def checkSimilarity(signal, template):
+def checkSimilarity(signal, template): # use correlation to see how close to template the signal is
     signal_fft = np.fft.fft(signal[0:16000])
     template_fft = np.fft.fft(template)
-    autocorr = np.fft.irfft(signal_fft * np.conj(template_fft))
+    corr = np.fft.irfft(signal_fft * np.conj(template_fft))
 
-    plt.plot(autocorr)
-    plt.title("Autocorr")
-    return max(autocorr)
+    plt.plot(corr)
+    plt.title("corr")
+    return max(corr)
 
 
-def checkMSE(filtered):
+def checkMSE(filtered):#compare signal to each template
     # Load templates
     template1 = AudioSegment.from_file("./Dataset/Template/0a7c2a8d_nohash_0.wav")  # a random woman saying yes
     template2 = AudioSegment.from_file("./Dataset/Template/0b40aa8e_nohash_0.wav")  # female no
@@ -57,7 +57,7 @@ def checkMSE(filtered):
 
     return mse1,mse2,mse3,mse4
 
-def fromMSEGuessWord(filtered):
+def fromMSEGuessWord(filtered): #from the mses guess the word
     mse1, mse2, mse3, mse4 = checkMSE(filtered)
 
     test = min(mse1, mse2, mse3, mse4)
