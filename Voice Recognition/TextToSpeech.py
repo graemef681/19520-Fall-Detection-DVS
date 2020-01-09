@@ -1,7 +1,7 @@
 from gtts import gTTS
 from pydub import AudioSegment
 from pydub.playback import play
-from pygame import mixer #easy way to play mp3
+from playsound import playsound
 
 def createFiles():
     #Function to connect to gTTS and create tts files
@@ -28,9 +28,7 @@ def createFiles():
     return
 
 def speak(type, number):
-    responseType ="./"+ type + str(number) + ".wav"
-    mixer.init()
-    mixer.music.load('e:/LOCAL/Betrayer/Metalik Klinik1-Anak Sekolah.mp3')
-    mixer.music.play()
+    responseType ="./"+ type + str(number) + ".mp3"
+    playsound(responseType)
 
     return
