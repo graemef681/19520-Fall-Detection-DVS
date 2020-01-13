@@ -28,11 +28,14 @@ for count in range(60):  # read first 60 frames
 
 print("Number of frames: {}".format(count + 1))
 
+print("image array type is: ")
+print(type(imageArray[1]))
+
 
 differenceArray = []
 count = 0
-for count in range(30): # calculates difference in frames
-  differenceArray.append((imageArray[count+1]-imageArray[count]))
+for count in range(3): # calculates difference in frames
+  differenceArray.append(abs((imageArray[count+1]-imageArray[count])))
   print("Calculating Diffference in frame:")
   print(count)
 
@@ -50,29 +53,31 @@ print(averageValue)
 
 q = 1
 
-for frameNumber in range(len(dvsFrames)):
-    frame = dvsFrames[frameNumber]
-    averageValue = numpy.percentile(frame,PERCENTILE)
-    (height, width) = frame.shape
-    numel = height * width
-    for columnNumber in range(width):
-        for rowNumber in range(height):
-            if frame[rowNumber, columnNumber] < averageValue:
-                frame[rowNumber, columnNumber] = 0
-            else:
-                frame[rowNumber, columnNumber] = 255
-    dvsFrames[frameNumber] = frame
-    
-    #cv2.imwrite("TEST%d.jpg" % q, frame)
-    #q=q+1
-    print("Thresholding Frame {} complete".format(frameNumber))
+#for frameNumber in range(len(dvsFrames)):
+#    frame = dvsFrames[frameNumber]
+#    averageValue = numpy.percentile(frame,PERCENTILE)
+#    (height, width) = frame.shape
+#    numel = height * width
+#    for columnNumber in range(width):
+#        for rowNumber in range(height):
+#            if frame[rowNumber, columnNumber] < averageValue:
+#                frame[rowNumber, columnNumber] = 0
+#            else:
+#               frame[rowNumber, columnNumber] = 255
+#    dvsFrames[frameNumber] = frame
+#    
+#    #cv2.imwrite("TEST%d.jpg" % q, frame)
+#    #q=q+1
+#    print("Thresholding Frame {} complete".format(frameNumber))
 
 
 
 size = (width, height)
 
+numpy.savetxt("array.csv", differenceArray[2], delimiter=",")
 
-for x in range(30):
+
+for x in range(3):
    print("saving frame:")
    print(x)
    cv2.imwrite("frame%d.jpg" % x, differenceArray[x])

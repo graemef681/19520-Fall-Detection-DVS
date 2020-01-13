@@ -1,22 +1,24 @@
 % Andrew Burr - DVS Test - 06/10/19
 close all; clear;
 
-pythonScriptName = 'test.py'; % change later
+videoFileName = 'fall.mp4';
+folderName = split(videoFileName, '.');
+folderName = string(folderName(1));
 
-% python script to split video into frames
-% [status,cmdout] = system(sprintf('python3 %s', pythonScriptName));
+command = sprintf('python3 splitIntoFrames.py %s', videoFileName);
+[status, commandOut] = system(command);
 
-if ~(status ==0)
-   disp(cmdout);
-   error('Python script failed') 
-end
+workingDir = pwd;
+cd(folderName);
 
-framesList = dir('frames\*img*.jpeg');
+framesList = dir('*frame*.jpg');
+
+cd(workingDir);
 
 frameArray = [];
 
 for frameNum = 1:numel(framesList)
-   frameArray = cat(3,frameArray, rgb2gray(imread(strcat('frames\', framesList(frameNum).name)))); 
+   frameArray = cat(3,frameArray, rgb2gray(imread(strcat(folderName ,"/", framesList(frameNum).name)))); 
 end
 
 differenceArray = [];
@@ -24,15 +26,19 @@ differenceArray = [];
 for frameNum = 2:numel(framesList)
     differenceframe = frameArray(:,:,frameNum) - frameArray(:,:,frameNum - 1);
     
-    for pixelNum = 1:numel(differenceframe)
-        differenceframe(pixelNum) = log10(double(differenceframe(pixelNum)));  
-    end
+   
     
-    average = mean(mean(differenceframe));
+    for pixelNum = 1:numel(differenceframe)
+        %differenceframe(pixelNum) = log10(double(differenceframe(pixelNum)));
+        differenceframe(pixelNum) = double(differenceframe(pixelNum));
+    end
+
+    
+    average = prctile(differenceframe(:), 97);
     fprintf('Average is %d   \n', average);
     
     for pixelNum = 1:numel(differenceframe)
-        if differenceframe(pixelNum) < 6 * average
+        if differenceframe(pixelNum) < average
             differenceframe(pixelNum) = 0;
         else
             differenceframe(pixelNum) = 255;
@@ -43,8 +49,12 @@ for frameNum = 2:numel(framesList)
     differenceArray = cat(3, differenceArray, differenceframe);
 end
 
+% for x = 1:(numel(framesList)-1)
+%    figure
+%    imshow(differenceArray(:,:,x));
+%    pause(0.1);
+% end
+
 for x = 1:(numel(framesList)-1)
-   figure
-   imshow(differenceArray(:,:,x));
-   pause(0.1);
+   imwrite(differenceArray(:,:,x), sprintf('dvs%d.png', x));
 end
