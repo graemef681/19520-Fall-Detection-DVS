@@ -1,7 +1,7 @@
 % Andrew Burr - DVS Test - 06/10/19
 close all; clear;
 
-videoFileName = 'fall.mp4';
+videoFileName = 'peopleWalking.mp4';
 folderName = split(videoFileName, '.');
 folderName = string(folderName(1));
 
@@ -34,7 +34,7 @@ for frameNum = 2:numel(framesList)
     end
 
     
-    average = prctile(differenceframe(:), 97);
+    average = prctile(differenceframe(:), 98);
     fprintf('Average is %d   \n', average);
     
     for pixelNum = 1:numel(differenceframe)
@@ -55,6 +55,13 @@ end
 %    pause(0.1);
 % end
 
+DVSFolderName = strcat('DVS', folderName);
+[~] = mkdir(DVSFolderName);
+cd(DVSFolderName);
+
+
 for x = 1:(numel(framesList)-1)
    imwrite(differenceArray(:,:,x), sprintf('dvs%d.png', x));
 end
+
+cd(workingDir);
