@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
-int enc[100]; //Holds encoded array of integers representing each run (up to 100 runs, should be adjusted? as long as its > needed)
+unsigned short enc[100]; //Holds encoded array of integers representing each run (up to 100 runs, should be adjusted? as long as its > needed)
 bool input[50] = {1,1,1,1,1 //1
                  ,1,1,1,1,1 //2
                  ,1,1,1,0,0 //3
