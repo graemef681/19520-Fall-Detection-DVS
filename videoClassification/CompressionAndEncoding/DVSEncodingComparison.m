@@ -1,5 +1,32 @@
 close all; clear;
+%Binary text file read
+fileID=fopen('encoded_BYTE4.txt');
+array = fread(fileID);
+data = zeros(1, (length(array)));
 
+j=1;
+for i=1:2:length(array)
+   new_enc(j)=bi2de([de2bi(array(i),8,'left-msb'),de2bi(array(i+1),8,'left-msb')],'left-msb');
+   j=j+1;
+end
+
+%for x = 1:2:length(array)
+%    data(x) = (16^2*array(x) + array(x+1));
+%end
+%dataarray = data(1:2:length(data));
+symbolslist = zeros(1, length(dataarray));
+symbolslist(2:2:length(dataarray)) = 1;
+%dataarray = dataarray';
+new_enc = new_enc';
+symbolslist = symbolslist';
+dataenc(:,2) = new_enc;
+dataenc(:,1) = symbolslist;
+
+%Find first zero in encoded data
+cutoff = find(dataenc(:,2)==0,1,'first');
+ToBeDecoded = new_enc(1:cutoff);
+noappendedzeros(:,1) = symbolslist(1:cutoff);
+noappendedzeros(:,2) = ToBeDecoded;
 % framesList = dir('*frame*.jpg');
 % dvsList = dir('*dvs*.png');
 % % LOSSLESS SOURCE CODING:
@@ -61,13 +88,17 @@ testimage = imread('wave1.png'); %LowNoise 5
 %testimage = imcrop(testimage,[1000 1000.5 639 639]);
 onedimage = reshape(testimage,[1 size(testimage,1)*size(testimage,2)]);
 rlenc = rleenc(onedimage);
-rldec = rledec(rlenc);
+
+%Encoded data in format Ax2 where A(:,2) is encoded data and A(:,1) is
+%symbols tied to each element. 
+rldec = rledec(dataenc);
+
 rldec(numel(onedimage)) = 0;
 reconstruct = reshape(rldec,[640 640]);
 figure(1);
 imshow(testimage);
 figure(2);
-imshow(reconstruct);
+imshow(reconstruct');
 payload = rlenc(:,2);
  % open your file for writing
  fid = fopen('myTextFile.txt','wt');
@@ -77,6 +108,10 @@ payload = rlenc(:,2);
      fprintf(fid,'%o\n',payload');
      fclose(fid);
  end
+savedimage = uint8(onedimage); 
+fid = fopen('encodeimage.txt','wt');  % Note the 'wt' for writing in text mode
+fprintf(fid,'%d,',savedimage);  % The format string is applied to each element of a
+fclose(fid);
 %To Decode from RLE back to DVS Image. 
     %First Decode RLE to Binary thresholded Image.
     %Second, change brightness value to match required bit depth?
