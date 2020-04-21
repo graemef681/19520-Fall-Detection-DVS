@@ -35,6 +35,17 @@ Contains:
 -
 
 ## Other
+- 19520 Interim Report Group 1 Mentor Draft.pdf - a draft of the interim report
+- Bill of Materials.xlsx - spreadsheet containing details of budget expenditure
+- DVS_model_diagram.drawio - editable diagram of FPGA subsystem
+- DVS_model_diagram.png - image version of above
+- GitHubQRCode.png - QR code to lead here for reports
+- ProjectGanttInitial.xlsx - Gantt chart of project progress
+- SystemLeveldesign.drawio - editable diagram of whole system
+- Systemleveldesign.png - image version of above
+- dvsImages.zip - collection of shared DVS frames for use in reports/poster/video/presentation
+- presentationSystemLevelDiagram.drawio - editable diagram of system design at interim project stage
+- presentationSystemLevelDiagram.png - image version of above
 
 
 
