@@ -36,10 +36,3 @@ def displayContact():
     print("Contact name: ", name)
     print("Contact number: ", phoneNumber)
     return
-
-def loadTemplates():
-    template1 = AudioSegment.from_file("./Dataset/Template/0a7c2a8d_nohash_0.wav")  # female yes
-    template2 = AudioSegment.from_file("./Dataset/Template/0b40aa8e_nohash_0.wav")  # female no
-    template3 = AudioSegment.from_file("./Dataset/Template/0135f3f2_nohash_0.wav")  # male yes
-    template4 = AudioSegment.from_file("./Dataset/Template/0b56bcfe_nohash_0.wav")  # male no
-    return template1, template2, template3, template4
