@@ -3,11 +3,6 @@
 ## Project Abstract
 The system detects if a person has fallen, communicates with them, and helps them receive the appropriate assistance without the need for a physical sensor or intrusive monitoring. This is performed by connecting a conventional camera sensor to an FPGA, which then finds the changes between frames. This data is then sent to a central server using Wi-Fi, where it is classified using a convolutional neural network as either a fall or not a fall  . If a fall has been detected, the system will use text-to-speech and voice recognition to communicate with the user, and call an appropriate form of help. 
 
-# Project Files
-## PYNQ-DVS - [author(s)]
-Contains: 
--
-
 ## Voice Recognition - Kirsty Purden
 Contains:
 - Filtering.py - a python file containing functions to filter audio files
@@ -24,10 +19,12 @@ Contains:
 -
 -
 
-## Zybo DVS - [author(s)]
--
--
--
+## Zybo DVS - Lewis Brown, Daniel Nadejde, Graeme Fitzpatrick 
+Contains:
+- DVS-Comparison-Images - a folder containing Example DVS images
+- DVS.zip - contains 3 folders; DVS is a HLS project which can be loaded into Vivado HLS. DVS_IP is a Vivado IP repository which can be loaded into Vivado with the emulated DVS IP Core. Sourcefiles contains the C code manipulated in HLS
+- Grey2RGB_ip_repo - an IP repository containing an IP which converts Greyscale DVS to RGB for display on a monitor
+- encmain.c - a C file which encodes DVS frames using Run Length Encoding
 
 ## videoClassification - Andrew Burr
 -
