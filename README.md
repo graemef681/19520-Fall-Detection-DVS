@@ -31,6 +31,19 @@ Contains:
 -
 -
 
+## Encoding Algorithm - Graeme Fitzpatrick
+Contains:
+- 3rdpic.png,floatingHead.png,Img_test.png,noMovement.png,noMovement2.png,sideview.png,sideview2.png,spooky.png,wave1.png, wave2.png, wave3.png, wave4.png - DVS images obtained from FPGA used for testing
+- dvs2.png, dvs3.png,Encode1.png,Encode2.png,ThresholdBool1.png,ThresholdBool2.png - DVS images obtained from pre-processing script on video of people walking, used for testing
+- DecodeDVSData.m - Script that takes encoded_BYTE{x}.txt file saved by TCP_Server.py from WiFi transmission, decodes and reconstructs the image.
+- DVSEncodingHelpScripts.m - Script used in development of encoder, containing all small functionality items such as saving DVS images into a text file to be imported and used with the C algorithm. 
+- encmain.c - C implemented encoder for DVS images.
+- EncodeDecodeTest.m - Script for encoding and decoding 640x640 '.png.' DVS Test images.
+- rledec.m = Run Length Encoding Decode function.
+- rleenc.m Run Length Encoding Encode Function.
+- readintoc.txt,encodeimage.txt - text file containing 1D DVS single channel image vector, importable for use with C algorithm.
+- encoded_data_BYTE.txt,encoded_BYTE{x}.txt - Binary data containing 2 byte encdoded arrays sent from FPGA, for use with DecodeDVSData.m
+
 ## Other
 - 19520 Interim Report Group 1 Mentor Draft.pdf - a draft of the interim report
 - Bill of Materials.xlsx - spreadsheet containing details of budget expenditure

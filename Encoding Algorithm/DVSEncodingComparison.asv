@@ -1,0 +1,81 @@
+close all; clear;
+%Binary text file read 
+fileID=fopen('encoded_BYTE4.txt');
+array = fread(fileID);
+data = zeros(1, (length(array)));
+
+j=1;
+for i=1:2:length(array)
+   new_enc(j)=bi2de([de2bi(array(i),8,'left-msb'),de2bi(array(i+1),8,'left-msb')],'left-msb');
+   j=j+1;
+end
+
+%for x = 1:2:length(array)
+%    data(x) = (16^2*array(x) + array(x+1));
+%end
+dataarray = data(1:2:length(data));
+symbolslist = zeros(1, length(dataarray));
+symbolslist(2:2:length(dataarray)) = 1;
+%dataarray = dataarray';
+new_enc = new_enc';
+symbolslist = symbolslist';
+dataenc(:,2) = new_enc;
+dataenc(:,1) = symbolslist;
+
+%Find first zero in encoded data
+cutoff = find(dataenc(:,2)==0,1,'first');
+ToBeDecoded = new_enc(1:cutoff);
+noappendedzeros(:,1) = symbolslist(1:cutoff);
+noappendedzeros(:,2) = ToBeDecoded;
+
+%Uncomment which to use, images from table in report
+%testimage = imread('floatingHead.png'); %%1
+%testimage = imread('wave4.png'); %LowNoise 2
+%testimage = imread('sideview2.png'); %LowNoise 3
+%testimage = imread('wave3.png'); %HighNoise4
+testimage = imread('wave1.png'); %LowNoise 5
+%testimage = imread('wave2.png'); %HighNoise6
+%testimage = imread('Img_test.png'); %%  7
+%testimage = imread('sideview.png'); %HighNoise 8
+%testimage = imread('3rdpic.png'); %%
+%testimage = imread('spooky.png'); %
+%testimage = imread('noMovement.png') %Nomovement
+
+onedimage = reshape(testimage,[1 size(testimage,1)*size(testimage,2)]);
+rlenc = rleenc(onedimage);
+
+%Encoded data in format Ax2 where A(:,2) is encoded data and A(:,1) is
+%symbols tied to each element. 
+rldec = rledec(dataenc);
+
+rldec(numel(onedimage)) = 0;
+reconstruct = reshape(rldec,[640 640]);
+figure(1);
+imshow(testimage);
+figure(2);
+imshow(reconstruct');
+payload = rlenc(:,2);
+ % open your file for writing
+ fid = fopen('myTextFile.txt','wt');
+ % write the matrix
+ 
+ if fid > 0
+     fprintf(fid,'%o\n',payload');
+     fclose(fid);
+ end
+savedimage = uint8(onedimage); 
+fid = fopen('encodeimage.txt','wt');  % Note the 'wt' for writing in text mode
+fprintf(fid,'%d,',savedimage);  % The format string is applied to each element of a
+fclose(fid);
+%To Decode from RLE back to DVS Image. 
+    %First Decode RLE to Binary thresholded Image.
+    %Second, change brightness value to match required bit depth?
+    %(Optional, logical pictures still produce black/white images).
+%     %Fix Image dimensions from vector.
+%     decodeBinary = rledec(rle);
+%     for pixelNum = 1:numel(decodeBinary)
+%         if(decodeBinary(pixelNum==1))
+%             decodeBinary(pixelNum) = 255;
+%         end
+%     end
+    %decodeImage = reshape(decodeBinary, [2160,3840]);
