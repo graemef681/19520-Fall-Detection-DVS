@@ -14,22 +14,19 @@ Contains:
 - q1,, q2, q3 .mp3 - files containing text to speech questions that the system will ask the fallen user
 - r1, r2, r3, r4 .mp3 - files containing text to speech responses to user speaking
 
-## Wifi Transmission - [author(s)]
-Contains: 
--
--
-
-## Zybo DVS - Lewis Brown, Daniel Nadejde, Graeme Fitzpatrick 
+## Wireless DVS FPGA Subsystem - Lewis Brown, Daniel Nadejde and Graeme Fitzpatrick  
 Contains:
-- DVS-Comparison-Images - a folder containing Example DVS images
+- DVS IP Core
+- Encoding Algorithm
+- WiFi_transmission
+- FAST_VivadoSDK.zip
+
+Each of these Folders contains a major element of project, with FAST_VivadoSD.zip containing the final system design
+
+## DVS IP Core - Lewis Brown
+Contains:
 - DVS.zip - contains 3 folders; DVS is a HLS project which can be loaded into Vivado HLS. DVS_IP is a Vivado IP repository which can be loaded into Vivado with the emulated DVS IP Core. Sourcefiles contains the C code manipulated in HLS
 - Grey2RGB_ip_repo - an IP repository containing an IP which converts Greyscale DVS to RGB for display on a monitor
-- encmain.c - a C file which encodes DVS frames using Run Length Encoding
-
-## videoClassification - Andrew Burr
--
--
--
 
 ## Encoding Algorithm - Graeme Fitzpatrick
 Contains:
@@ -43,6 +40,19 @@ Contains:
 - rleenc.m Run Length Encoding Encode Function.
 - readintoc.txt,encodeimage.txt - text file containing 1D DVS single channel image vector, importable for use with C algorithm.
 - encoded_data_BYTE.txt,encoded_BYTE{x}.txt - Binary data containing 2 byte encdoded arrays sent from FPGA, for use with DecodeDVSData.m
+
+## Wifi Transmission - Daniel Nadejde
+Contains: 
+-
+-
+
+
+
+## videoClassification - Andrew Burr
+-
+-
+-
+
 
 ## Other
 - 19520 Interim Report Group 1 Mentor Draft.pdf - a draft of the interim report
