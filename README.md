@@ -56,9 +56,3 @@ Contains:
 - dvsImages.zip - collection of shared DVS frames for use in reports/poster/video/presentation
 - presentationSystemLevelDiagram.drawio - editable diagram of system design at interim project stage
 - presentationSystemLevelDiagram.png - image version of above
-
-
-
-(Graeme can we remove the below link?)
-CSI to 24Pin FPC Connector Pinout
-http://www.myirtech.com/list.asp?id=611
