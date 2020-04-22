@@ -9,7 +9,7 @@ Contains:
 - RecordSpeech.py - a python file to record audio from a microphone
 - TestFunctions.py - a python file with various functions to test the system (would not be part of the final product)
 - TextToSpeech.py - a python file to create the necessary text to speech
-- setup.py - a python file to take in name and phonenumber of user's named contact, and the user's addres, on first time setup
+- setup.py - a python file to take in name and phonenumber of user's named contact, and the user's address, on first time setup
 - voiceRecog.py - a python file using a HMM to determine what speech has been said in an audio clip
 - q1,, q2, q3 .mp3 - files containing text to speech questions that the system will ask the fallen user
 - r1, r2, r3, r4 .mp3 - files containing text to speech responses to user speaking
