@@ -26,7 +26,8 @@ Each of these Folders contains a major element of project, with FAST_VivadoSD.zi
 ## DVS IP Core - Lewis Brown
 Contains:
 - DVS.zip - contains 3 folders; DVS is a HLS project which can be loaded into Vivado HLS. DVS_IP is a Vivado IP repository which can be loaded into Vivado with the emulated DVS IP Core. Sourcefiles contains the C code manipulated in HLS
-- Grey2RGB_ip_repo - an IP repository containing an IP which converts Greyscale DVS to RGB for display on a monitor
+- Grey2RGB_ip_repo - an IP repository containing an IP which converts Greyscale DVS to RGB for display on a monitor. This was used exclusively for testing purposes and as the final tests did not use a monitor this was not included. 
+- PYNQ_DVS - a record of the initial attempt at emulating DVS, using the PYNQ-Z2 FPGA and openCV Python libraries. This was discarded as it was relient on the embedded processor, not utalising the FPGA Fabric Logic
 
 ## Encoding Algorithm - Graeme Fitzpatrick
 Contains:
